@@ -27,18 +27,20 @@ class Hand {
 
     Hand(const Hand& other) : m_hand(other.m_hand), m_bid(other.m_bid){};
 
-    Rank getRank() const;
+    Rank getRank(bool jokerRule) const;
     inline int getBid() const { return m_bid; };
     inline const std::string_view getDesc() const { return m_hand; }
 
-    bool operator<(const Hand& other) const;
+    bool lessThan(const Hand& other, bool jokerRule = false) const;
+    inline bool operator<(const Hand& other) const {
+        return this->lessThan(other);
+    }
     inline bool operator>(const Hand& other) const { return other < *this; }
 
     Hand& operator=(const Hand& other);
 
     inline friend std::ostream& operator<<(std::ostream& os, const Hand& hand) {
-        os << "Hand: " << hand.m_hand << " - Bid: " << hand.m_bid
-           << " - Rank: " << hand.getRank();
+        os << "Hand: " << hand.m_hand << " - Bid: " << hand.m_bid;
 
         return os;
     }

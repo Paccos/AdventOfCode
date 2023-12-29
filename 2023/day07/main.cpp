@@ -4,7 +4,19 @@
 #include "Hand.hpp"
 #include "StringSplit.hpp"
 
-int main() {
+int main(int argc, char** args) {
+    bool jokerRule{false};
+
+    if (argc == 2) {
+        if (strcmp(args[1], "-j") && strcmp(args[1], "--joker")) {
+            std::cout << "Usage: " << args[0] << " [-j | --joker]" << '\n';
+
+            return -1;
+        }
+
+        jokerRule = true;
+    }
+
     std::ifstream infile("input");
     std::string line;
 
@@ -17,7 +29,9 @@ int main() {
     }
 
     std::sort(hands.begin(), hands.end(),
-              [](const Hand& a, const Hand& b) { return a < b; });
+              [jokerRule](const Hand& a, const Hand& b) {
+                  return a.lessThan(b, jokerRule);
+              });
 
     long rankedBiddingsSum{};
 

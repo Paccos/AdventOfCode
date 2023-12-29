@@ -15,7 +15,7 @@ Rank twoOrOnePair(const std::map<char, int>& cardAmounts) {
     return Rank::onePair;
 }
 
-Rank Hand::getRank() const {
+Rank Hand::getRank(bool jokerRule) const {
     std::map<char, int> cardAmounts{};
     for (const auto& c : m_hand) {
         if (cardAmounts.contains(c)) {
@@ -25,11 +25,24 @@ Rank Hand::getRank() const {
         }
     }
 
-    int maxAmount{
-        std::max_element(
-            std::begin(cardAmounts), std::end(cardAmounts),
-            [](const auto& a, const auto& b) { return a.second < b.second; })
-            ->second};
+    std::vector<std::pair<char, int>> kvPairs(cardAmounts.size());
+
+    std::transform(cardAmounts.begin(), cardAmounts.end(), kvPairs.begin(),
+                   [](const auto& kvp) { return kvp; });
+
+    std::sort(kvPairs.begin(), kvPairs.end(),
+              [](auto& a, auto& b) { return a.second > b.second; });
+
+    int maxAmount{kvPairs[0].second};
+
+    if (maxAmount == 5) return Rank::fiveOfAKind;
+
+    if (jokerRule) {
+        if (kvPairs[0].first == 'J') maxAmount = kvPairs[1].second;
+
+        maxAmount += cardAmounts['J'];
+        cardAmounts.erase('J');
+    }
 
     switch (maxAmount) {
         case 5:
@@ -49,9 +62,16 @@ Rank Hand::getRank() const {
 }
 
 // comparison works like "is a < b"
-bool compareCards(char a, char b) {
-    constexpr char rankIndex[]{'A', 'K', 'Q', 'J', 'T', '9', '8',
-                               '7', '6', '5', '4', '3', '2'};
+bool compareCards(char a, char b, bool jokerRule) {
+    std::vector<char> rankIndex;
+
+    if (jokerRule) {
+        rankIndex = {'A', 'K', 'Q', 'T', '9', '8', '7',
+                     '6', '5', '4', '3', '2', 'J'};
+    } else {
+        rankIndex = {'A', 'K', 'Q', 'J', 'T', '9', '8',
+                     '7', '6', '5', '4', '3', '2'};
+    }
 
     std::size_t aIndex{};
     std::size_t bIndex{};
@@ -69,22 +89,22 @@ bool compareCards(char a, char b) {
     return aIndex > bIndex;
 }
 
-bool Hand::operator<(const Hand& other) const {
-    Rank thisRank{this->getRank()};
-    Rank otherRank{other.getRank()};
+bool Hand::lessThan(const Hand& other, bool jokerRule) const {
+    Rank thisRank{this->getRank(jokerRule)};
+    Rank otherRank{other.getRank(jokerRule)};
 
     if (thisRank != otherRank) return thisRank > otherRank;
 
     // Compare cards for tiebreak. Order of cards in hands matters, i.e. if
-    // second card of this hand is higher than second card of other hand, this
-    // hand is ranked higher
+    // second card of this hand is higher than second card of other hand,
+    // this hand is ranked higher
 
     for (std::size_t i{0}; i < 5; ++i) {
         char thisCard{this->getDesc().at(i)};
         char otherCard(other.getDesc().at(i));
 
         if (thisCard != otherCard) {
-            return compareCards(thisCard, otherCard);
+            return compareCards(thisCard, otherCard, jokerRule);
         }
     }
 
