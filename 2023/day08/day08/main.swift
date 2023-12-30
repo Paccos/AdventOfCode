@@ -59,6 +59,6 @@ func findLoopLength(node: Node, directions: [Character], nodeMap: Dictionary<Str
 let startNodes = nodes.filter { node in node.name.hasSuffix("A") }
 let loopLengths = startNodes.map { findLoopLength(node: $0, directions: directionArray, nodeMap: nodeMap) }
 
-let stepsFromAnodesToZnodes = loopLengths.reduce(1) { lcm($0, $1) }
+let stepsFromAnodesToZnodes = loopLengths.reduce(1, lcm)
 
 print("Steps from nodes that end with A so that all end with Z: \(stepsFromAnodesToZnodes)")
