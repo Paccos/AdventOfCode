@@ -28,7 +28,7 @@
 		07054FC52B40A475001DCF11 /* test_inputP2 */ = {isa = PBXFileReference; lastKnownFileType = text; path = test_inputP2; sourceTree = "<group>"; };
 		07054FC82B40C792001DCF11 /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
 		07054FCA2B40C876001DCF11 /* Maths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Maths.swift; sourceTree = "<group>"; };
-		07054FCC2B40CB69001DCF11 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		07054FCC2B40CB69001DCF11 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		0706430F2B405EE10080A074 /* day08 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = day08; sourceTree = BUILT_PRODUCTS_DIR; };
 		070643122B405EE10080A074 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		070643192B405F440080A074 /* input */ = {isa = PBXFileReference; lastKnownFileType = text; path = input; sourceTree = "<group>"; };
