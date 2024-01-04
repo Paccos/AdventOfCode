@@ -10,18 +10,38 @@ fn main() {
         }
     };
 
-    let result: i32 = input
+    let input_numbers: Vec<Vec<i32>> = input
         .lines()
         .map(|line| {
-            let numbers: Vec<i32> = line
-                .split_whitespace()
+            line.split_whitespace()
                 .map(|num_str| num_str.parse::<i32>())
                 .filter_map(|x| x.ok())
-                .collect();
-
-            new_last_number(&numbers)
+                .collect()
         })
+        .collect();
+
+    // Part 1
+
+    let last_num_sum: i32 = input_numbers.iter().map(|v| new_last_number(v)).sum();
+
+    println!("Sum of next numbers of sequences is: {}", last_num_sum);
+
+    // Part 2
+
+    // The algorithm works for extrapolating the past by just reversing the input...
+
+    let input_numbers_reversed: Vec<Vec<i32>> = input_numbers
+        .iter()
+        .map(|v| v.iter().map(|i| i.to_owned()).rev().collect())
+        .collect();
+
+    let first_num_sum: i32 = input_numbers_reversed
+        .iter()
+        .map(|v| new_last_number(v))
         .sum();
 
-    println!("Sum of next numbers of sequences is: {}", result);
+    println!(
+        "Sum of extrapolated first numbers of sequences is: {}",
+        first_num_sum
+    );
 }
